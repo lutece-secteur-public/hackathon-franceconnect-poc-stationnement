@@ -48,14 +48,14 @@ public class CarteGrise implements Serializable
      */
     private static final long serialVersionUID = 1L;
 
-    private String _strTPpNom = "VOILE";
-    private String _strTPpPrenom = "Laurence";
-    private String _strTPpSexe = "M";
-    private String _strVCouleur = "Gris";
-    private String _strVDenominationCommerciale = "Sharan";
-    private String _strVNumeroIdentifiant = "7MSEA8TAWCX0NAGFA59B010S";
-    private String _strVNumeroImmatriculation = "AA-711-AA";
-    private String _strVMarque = "Volkswagen";
+    private String _strTPpNom;
+    private String _strTPpPrenom;
+    private String _strTPpSexe;
+    private String _strVCouleur;
+    private String _strVDenominationCommerciale;
+    private String _strVNumeroIdentifiant;
+    private String _strVNumeroImmatriculation;
+    private String _strVMarque;
 
     public void setTPpSexe( String strTPpSexe  )
     {
