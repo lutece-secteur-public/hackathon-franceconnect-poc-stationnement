@@ -175,11 +175,8 @@ public class FranceConnectSampleApp extends MVCApplication
             // TODO Process error
         }
 
-        System.out.println( "Données du formulaire : " + _formData.getPrenomEnfant(  ) + " " +
-            _formData.getNomEnfant(  ) );
+        System.out.println( "Données du formulaire : " + _formData.getImmatriculation(  ) );
 
-        //TODO fetch car immatriculations
-        //return redirect( request, DataClientService.instance(  ).getDataClientUrl( DATACLIENT_ADRESSE ) );
         return redirectView( request, VIEW_DEMARCHE_ETAPE2 );
     }
 
@@ -192,9 +189,12 @@ public class FranceConnectSampleApp extends MVCApplication
     public XPage viewDemarcheEtape2( HttpServletRequest request )
     {
         Map<String, Object> model = getModel(  );
-        model.put( MARK_FORM_DATA, _formData );
-        _userAdresse = (UserAdresse) request.getSession(  ).getAttribute( AdresseDataClient.ATTRIBUTE_USERADRESSE );
-        model.put( MARK_MONTANT, _userAdresse.getCodePostal() );
+        for (CarteGrise carteGrise: _userCartesGrises.getCartesGrises()) {
+            if (carteGrise.getVNumeroImmatriculation().equals(_formData.getImmatriculation())) {
+                model.put( MARK_FORM_DATA, carteGrise );
+                break;
+            }
+        }
 
         return getXPage( TEMPLATE_DEMARCHE_ETAPE2, request.getLocale(  ), model );
     }

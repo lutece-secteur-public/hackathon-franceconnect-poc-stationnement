@@ -46,39 +46,21 @@ public class FormData implements Serializable
 {
     private static final long serialVersionUID = 1L;
     @NotEmpty
-    private String _strNomEnfant;
-    @NotEmpty
-    private String _strPrenomEnfant;
+    private String _strImmatriculation;
 
     /**
      * @return the nomEnfant
      */
-    public String getNomEnfant(  )
+    public String getImmatriculation(  )
     {
-        return _strNomEnfant;
+        return _strImmatriculation;
     }
 
     /**
-     * @param strNomEnfant the nomEnfant to set
+     * @param strImmatriculation the nomEnfant to set
      */
-    public void setNomEnfant( String strNomEnfant )
+    public void setImmatriculation( String strImmatriculation )
     {
-        _strNomEnfant = strNomEnfant;
-    }
-
-    /**
-     * @return the prenomEnfant
-     */
-    public String getPrenomEnfant(  )
-    {
-        return _strPrenomEnfant;
-    }
-
-    /**
-     * @param strPrenomEnfant the prenomEnfant to set
-     */
-    public void setPrenomEnfant( String strPrenomEnfant )
-    {
-        _strPrenomEnfant = strPrenomEnfant;
+        _strImmatriculation = strImmatriculation;
     }
 }
