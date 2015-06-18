@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.stationnement.service.RedirectUtils;
 import fr.paris.lutece.plugins.stationnement.web.FranceConnectSampleApp;
 import fr.paris.lutece.plugins.franceconnect.oidc.Token;
 import fr.paris.lutece.plugins.franceconnect.oidc.dataclient.AbstractDataClient;
+import fr.paris.lutece.plugins.franceconnect.service.MapperService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.io.IOException;
@@ -46,21 +47,26 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * RevenuDataClient
+ * AdresseDataClient.java
  */
-public class RevenuDataClient extends AbstractDataClient
+public class AdresseDataClient extends AbstractDataClient
 {
+
+    public static final String ATTRIBUTE_USERADRESSE = "stationnement-dc-useradresse";
+
     @Override
     public void handleToken( Token token, HttpServletRequest request, HttpServletResponse response )
     {
         try
         {
+            UserAdresse userAdresse = MapperService.parse( getData( token ), UserAdresse.class );
+            request.getSession( true ).setAttribute( ATTRIBUTE_USERADRESSE, userAdresse );
             String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_ETAPE2 );
             response.sendRedirect( strRedirectUrl );
         }
         catch ( IOException ex )
         {
-            AppLogService.error( "Error DataClient Revenu : " + ex.getMessage(  ), ex );
+            AppLogService.error( "Error DataClient Adresse : " + ex.getMessage(  ), ex );
         }
     }
 }

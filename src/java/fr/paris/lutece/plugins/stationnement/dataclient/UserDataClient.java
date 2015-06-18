@@ -62,7 +62,7 @@ public class UserDataClient extends AbstractDataClient
             UserInfo userInfo = MapperService.parse( getData( token ), UserInfo.class );
             request.getSession( true ).setAttribute( ATTRIBUTE_USERINFO, userInfo );
 
-            String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_FORM );
+            String strRedirectUrl = RedirectUtils.getActionUrl( request, FranceConnectSampleApp.ACTION_START_DEMARCHE );
             response.sendRedirect( strRedirectUrl );
         }
         catch ( IOException ex )
