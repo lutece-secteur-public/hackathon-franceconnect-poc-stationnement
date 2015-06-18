@@ -1,78 +1,65 @@
-<br>
-<br>
-<div class="row-fluid">
+<div class="row">
+  <div class="col-md-12">
+    <h2>Demande de carte de stationnement rÈsidentiel</h2>
+    <div class="well">
+      <form method="POST" id="crecheForm" class="form-horizontal" action="jsp/site/Portal.jsp">
+        <input type="hidden" name="page" value="stationnement" />
+        <input type="hidden" name="action" value="processForm" />
+        <div class="form-group">
+          <label for="textinput-0" class="col-sm-3 control-label">Nom</label>
+          <div class="col-sm-8">
+              <input id="textinput-0" name="textinput-0" type="text" placeholder="Nom" class="form-control" disabled value="${lastname!''}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="textinput-1" class="col-sm-3 control-label">PrÈnom</label>
+          <div class="col-sm-8">
+            <input id="textinput-1" name="textinput-1" type="text" placeholder="PrÈnom" class="form-control" disabled value="${firstname!''}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="votreAdresse" class="col-sm-3 control-label" >Votre adresse</label>
+          <div class="col-sm-8">
+            <input id="votreAdresse" name="votreAdresse" type="text" placeholder="" class="form-control" disabled value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="voitures" class="col-sm-3 control-label" >SÈlectionner le vÈhicule concernÈ</label>
+          <div class="col-sm-8">
+            <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+              AB - 123 - CD - Carte valdie jusqu'au 14/04/2016
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              JK - 456 -TH
+            </label>
+          </div>
+          <div class="radio disabled">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+              KZ - 561 -TH
+            </label>
+          </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <p class="form-control-static lead"><strong>Sur la base de ces informations, vous pouvez demander une carte 3 ans gratuite</strong></p>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-8">
+            <button type="submit" value="Confirmer" class="btn btn-primary">
+              Continuer
+            </button>
 
-    <#include "includes/panel.html" />
-
-    <div class="col-md-6 well">
-
-        <form method="POST" id="crecheForm" class="form-horizontal" action="jsp/site/Portal.jsp">
-            <input type="hidden" name="page" value="stationnement" />
-            <input type="hidden" name="action" value="processForm" />
-            <fieldset>
-
-                <!-- Form Name -->
-                <legend>V√©rifiez et compl√©tez les informations suivantes :*</legend>
-
-                <!-- Text input-->
-                <div class="form-group">
-                    <label for="textinput-0" class="col-sm-3 control-label"
-                           style="text-align:right;float:left;">Nom</label>
-                    <div class="col-sm-8">
-                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
-                               class="form-control" disabled
-                               value="${lastname!''}">
-                    </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group row">
-                    <label for="textinput-1" class="col-sm-3 control-label"
-                           style="text-align:right;float:left;">Pr√©nom</label>
-                    <div class="col-sm-8">
-                        <input id="textinput-1" name="textinput-1" type="text" placeholder=""
-                               class="form-control" disabled
-                               value="${firstname!''}">
-                    </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group row">
-                    <label for="nomEnfant" class="col-sm-3 control-label"
-                           style="text-align:right;float:left;">Nom de votre enfant</label>
-                    <div class="col-sm-8">
-                        <input id="nomEnfant" name="nomEnfant" type="text" placeholder=""
-                               class="form-control" required="">
-                    </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group row">
-                    <label for="prenomEnfant" class="col-sm-3 control-label"
-                           style="text-align:right;float:left;">Pr√©nom de votre enfant</label>
-                    <div class="col-sm-8">
-                        <input id="prenomEnfant" name="prenomEnfant" type="text" placeholder=""
-                               class="form-control" required="">
-                    </div>
-                </div>
-                
-            </fieldset>
-            <input type="submit" value="Confirmer" class="btn btn-primary" onclick="submitInPopup()">
-            <br/>
-            <span style="text-size:8px">* Vous allez ensuite √™tre redirig√© vers une page qui va vous montrer les donn√©es auxquelles va acc√©der le service pour compl√©ter votre demande. Nous aurons besoin de votre consentement.</span>
         </form>
-    </div>
+      </div>
+  </div>
 </div>
-
-<script type="text/javascript">
-    function submitInPopup() {
-        var screenTabletWith = 767;
-        if ($(window).width() > screenTabletWith) {
-            $("#crecheForm").submit(function () {
-                OpenPopupCenter(this.action, 'authFranceConnect', 500, 600);
-            });
-        } else {
-            $("#crecheForm").unbind().attr('target', '');
-        }
-    }
-</script>
+</div>
+</div>
