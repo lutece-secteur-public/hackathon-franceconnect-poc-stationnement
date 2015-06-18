@@ -33,17 +33,21 @@
  */
 package fr.paris.lutece.plugins.stationnement.dataclient;
 
-import fr.paris.lutece.plugins.stationnement.service.RedirectUtils;
-import fr.paris.lutece.plugins.stationnement.web.FranceConnectSampleApp;
-import fr.paris.lutece.plugins.franceconnect.oidc.Token;
-import fr.paris.lutece.plugins.franceconnect.oidc.dataclient.AbstractDataClient;
-import fr.paris.lutece.plugins.franceconnect.service.MapperService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import fr.paris.lutece.plugins.franceconnect.oidc.Token;
+import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
+import fr.paris.lutece.plugins.franceconnect.oidc.dataclient.AbstractDataClient;
+import fr.paris.lutece.plugins.franceconnect.service.MapperService;
+import fr.paris.lutece.plugins.stationnement.service.RedirectUtils;
+import fr.paris.lutece.plugins.stationnement.web.FranceConnectSampleApp;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.util.httpaccess.HttpAccess;
+import fr.paris.lutece.util.httpaccess.HttpAccessException;
 
 
 /**
@@ -53,6 +57,9 @@ public class AdresseDataClient extends AbstractDataClient
 {
 
     public static final String ATTRIBUTE_USERADRESSE = "stationnement-dc-useradresse";
+    public static final String ATTRIBUTE_USERCARTESGRISES = "stationnement-dc-usercartesgrises";
+
+    private String _strOtherDataServerUri;
 
     @Override
     public void handleToken( Token token, HttpServletRequest request, HttpServletResponse response )
@@ -60,13 +67,39 @@ public class AdresseDataClient extends AbstractDataClient
         try
         {
             UserAdresse userAdresse = MapperService.parse( getData( token ), UserAdresse.class );
-            request.getSession( true ).setAttribute( ATTRIBUTE_USERADRESSE, userAdresse );
-            String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_ETAPE2 );
+            HttpSession session = request.getSession( true );
+            session.setAttribute( ATTRIBUTE_USERADRESSE, userAdresse );
+
+            UserInfo userInfo = (UserInfo) session.getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
+
+            HttpAccess httpAccess = new HttpAccess(  );
+            String strUrl = _strOtherDataServerUri + userInfo.getFamilyName();
+            String strResponse = httpAccess.doGet( strUrl, null, null );
+            UserCartesGrises userCartesGrises = MapperService.parse( strResponse, UserCartesGrises.class );
+
+            session.setAttribute( ATTRIBUTE_USERCARTESGRISES, userCartesGrises );
+
+            String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_FORM );
+
             response.sendRedirect( strRedirectUrl );
         }
         catch ( IOException ex )
         {
             AppLogService.error( "Error DataClient Adresse : " + ex.getMessage(  ), ex );
         }
+        catch ( HttpAccessException ex )
+        {
+            _logger.error( "Error when fetching mi_siv" + ex.getMessage(  ), ex );
+        }
+    }
+
+    public String getOtherDataServerUri(  )
+    {
+        return _strOtherDataServerUri;
+    }
+
+    public void setOtherDataServerUri( String strOtherDataServerUri )
+    {
+        _strOtherDataServerUri = strOtherDataServerUri;
     }
 }

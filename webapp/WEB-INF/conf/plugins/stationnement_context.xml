@@ -22,10 +22,12 @@
     <bean id="stationnement.dataClientAdresse" class="fr.paris.lutece.plugins.stationnement.dataclient.AdresseDataClient">
         <property name="name" value="adresse" />
         <property name="dataServerUri" value="https://datafranceconnect.opendatasoft.com/api/records/1.0/search?dataset=dgfip_rp"/>
+        <property name="otherDataServerUri" value="https://datafranceconnect.opendatasoft.com/api/records/1.0/search?dataset=mi_siv&amp;apikey=fd058b29cb521f60ff64dac2cf568b7f953ec5a367e278054fbc8c16&amp;q=t_pp_nom:"/>
         <property name="tokenMethod" value="HEADER"/>
         <property name="scope">
             <set value-type="java.lang.String">
                 <value>ods_dgfip_rp</value>
+                <value>ods_mi_siv</value>
             </set>
         </property>
     </bean>

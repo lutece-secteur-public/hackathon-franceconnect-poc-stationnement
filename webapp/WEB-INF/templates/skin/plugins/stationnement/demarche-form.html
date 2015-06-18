@@ -20,30 +20,20 @@
         <div class="form-group">
           <label for="votreAdresse" class="col-sm-3 control-label" >Votre adresse</label>
           <div class="col-sm-8">
-              <input id="votreAdresse" name="votreAdresse" type="text" placeholder="" class="form-control" disabled value="${adresse.codePostal} ${adresse.commune} ${adresse.adresse} ">
+              <input id="votreAdresse" name="votreAdresse" type="text" placeholder="" class="form-control" disabled value="${adresse.codePostal!''} ${adresse.commune!''} ${adresse.adresse!''} ">
           </div>
         </div>
         <div class="form-group">
           <label for="voitures" class="col-sm-3 control-label" >S&eacute;lectionner le v&eacute;hicule concern&eacute;</label>
           <div class="col-sm-8">
+          <#list cartesgrises as cartegrise>
             <div class="radio">
             <label>
               <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-              AB - 123 - CD - Carte valide jusqu'au 14/04/2016
-            </label>
+              ${cartegrise.VNumeroImmatriculation!'XX-000-XX'}
+             </label>
           </div>
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-              JK - 456 -TH
-            </label>
-          </div>
-          <div class="radio disabled">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-              KZ - 561 -TH
-            </label>
-          </div>
+          </#list>
           </div>
         </div>
         <div class="form-group">

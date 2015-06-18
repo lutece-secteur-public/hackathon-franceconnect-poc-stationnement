@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.stationnement.web;
 
 import fr.paris.lutece.plugins.stationnement.business.FormData;
 import fr.paris.lutece.plugins.stationnement.dataclient.AdresseDataClient;
+import fr.paris.lutece.plugins.stationnement.dataclient.CarteGrise;
+import fr.paris.lutece.plugins.stationnement.dataclient.UserCartesGrises;
 import fr.paris.lutece.plugins.stationnement.dataclient.UserDataClient;
 import fr.paris.lutece.plugins.stationnement.dataclient.UserAdresse;
 import fr.paris.lutece.plugins.stationnement.service.RedirectUtils;
@@ -75,6 +77,7 @@ public class FranceConnectSampleApp extends MVCApplication
     private static final String MARK_LASTNAME = "lastname";
     private static final String MARK_FIRSTNAME = "firstname";
     private static final String MARK_ADRESSE = "adresse";
+    private static final String MARK_CARTESGRISES = "cartesgrises";
     private static final String MARK_FORM_DATA = "form";
     private static final String MARK_MONTANT = "montant";
     private static final String DATACLIENT_USER = "user";
@@ -82,6 +85,7 @@ public class FranceConnectSampleApp extends MVCApplication
     private static final long serialVersionUID = 1L;
     private UserInfo _userInfo;
     private UserAdresse _userAdresse;
+    private UserCartesGrises _userCartesGrises;
     private FormData _formData;
 
     /**
@@ -133,8 +137,15 @@ public class FranceConnectSampleApp extends MVCApplication
     public XPage viewDemarcheForm( HttpServletRequest request )
     {
         _userInfo = (UserInfo) request.getSession(  ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
+        _userAdresse = (UserAdresse) request.getSession(  ).getAttribute( AdresseDataClient.ATTRIBUTE_USERADRESSE );
+        _userCartesGrises = (UserCartesGrises) request.getSession(  ).getAttribute( AdresseDataClient.ATTRIBUTE_USERCARTESGRISES );
 
         if ( _userInfo == null )
+        {
+            return redirect( request, RedirectUtils.getActionUrl( request, ACTION_START_DEMARCHE ) );
+        }
+
+        if ( _userAdresse == null )
         {
             return redirect( request, RedirectUtils.getActionUrl( request, ACTION_START_DEMARCHE ) );
         }
@@ -143,6 +154,7 @@ public class FranceConnectSampleApp extends MVCApplication
         model.put( MARK_FIRSTNAME, _userInfo.getGivenName(  ) );
         model.put( MARK_LASTNAME, _userInfo.getFamilyName(  ) );
         model.put( MARK_ADRESSE, _userAdresse );
+        model.put( MARK_CARTESGRISES, _userCartesGrises.getCartesGrises() );
 
         return getXPage( TEMPLATE_DEMARCHE_FORM, request.getLocale(  ), model );
     }
