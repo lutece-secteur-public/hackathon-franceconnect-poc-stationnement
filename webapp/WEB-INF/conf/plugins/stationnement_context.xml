@@ -6,7 +6,7 @@
 
     <bean id="stationnement.dataClientUser" class="fr.paris.lutece.plugins.stationnement.dataclient.UserDataClient">
         <property name="name" value="user" />
-        <property name="dataServerUri" value="https://fcp.integ01.dev-franceconnect.fr/api/v1/userinfo"/>
+        <property name="dataServerUri" value="https://pp.dev-franceconnect.fr/api/v1/userinfo"/>
         <property name="tokenMethod" value="HEADER"/>
         <property name="scope">
             <set value-type="java.lang.String">
@@ -19,17 +19,27 @@
         </property>
     </bean>
 
-    <bean id="stationnement.dataClientAdresse" class="fr.paris.lutece.plugins.stationnement.dataclient.AdresseDataClient">
-        <property name="name" value="adresse" />
-        <property name="dataServerUri" value="https://datafranceconnect.opendatasoft.com/api/records/1.0/search?dataset=dgfip_rp"/>
-        <property name="otherDataServerUri" value="https://datafranceconnect.opendatasoft.com/api/records/1.0/search?dataset=mi_siv&amp;apikey=fd058b29cb521f60ff64dac2cf568b7f953ec5a367e278054fbc8c16&amp;q=t_pp_nom:"/>
+    <bean id="stationnement.dataClientAft" class="fr.paris.lutece.plugins.stationnement.dataclient.AftDataClient">
+        <property name="name" value="stationnement.aft" />
+        <property name="dataServerUri" value="https://cft.integration.impots.gouv.fr/impotparticulier/os2/2015"/>
         <property name="tokenMethod" value="HEADER"/>
         <property name="scope">
             <set value-type="java.lang.String">
-                <value>ods_dgfip_rp</value>
-                <value>ods_mi_siv</value>
+                <value>dgfip_aft</value>
             </set>
         </property>
     </bean>
+
+    <bean id="stationnement.dataClientVehicule" class="fr.paris.lutece.plugins.stationnement.dataclient.AdresseDataClient">
+        <property name="name" value="stationnement.vehicule" />
+        <property name="dataServerUri" value="https://siv-vabf-part.interieur.gouv.fr/vehicule/AD-208-AM" />
+        <property name="tokenMethod" value="HEADER"/>
+        <property name="scope">
+            <set value-type="java.lang.String">
+                <value>scope_bouchon_immat</value>
+            </set>
+        </property>
+    </bean>
+
 
 </beans>

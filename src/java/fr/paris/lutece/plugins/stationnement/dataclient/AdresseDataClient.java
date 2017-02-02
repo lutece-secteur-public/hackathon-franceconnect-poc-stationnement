@@ -34,13 +34,15 @@
 package fr.paris.lutece.plugins.stationnement.dataclient;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.httpclient.HttpMethodBase;
+
 import fr.paris.lutece.plugins.franceconnect.oidc.Token;
-import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
 import fr.paris.lutece.plugins.franceconnect.oidc.dataclient.AbstractDataClient;
 import fr.paris.lutece.plugins.franceconnect.service.MapperService;
 import fr.paris.lutece.plugins.stationnement.service.RedirectUtils;
@@ -48,6 +50,7 @@ import fr.paris.lutece.plugins.stationnement.web.FranceConnectSampleApp;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.httpaccess.HttpAccess;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
+import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 
 
 /**
@@ -56,50 +59,93 @@ import fr.paris.lutece.util.httpaccess.HttpAccessException;
 public class AdresseDataClient extends AbstractDataClient
 {
 
-    public static final String ATTRIBUTE_USERADRESSE = "stationnement-dc-useradresse";
     public static final String ATTRIBUTE_USERCARTESGRISES = "stationnement-dc-usercartesgrises";
-
-    private String _strOtherDataServerUri;
 
     @Override
     public void handleToken( Token token, HttpServletRequest request, HttpServletResponse response )
     {
+        CarteGrise carteGrise;
         try
         {
-            UserAdresse userAdresse = MapperService.parse( getData( token ), UserAdresse.class );
-            HttpSession session = request.getSession( true );
-            session.setAttribute( ATTRIBUTE_USERADRESSE, userAdresse );
+            String strCarteGriseJSON = getData( token );
+            carteGrise = MapperService.parse( strCarteGriseJSON, CarteGrise.class );
+            carteGrise.setSource(strCarteGriseJSON);
+        } catch ( Exception ex ) {
+            AppLogService.error( "Error when fetching carte grise" + ex.getMessage(  ), ex );
+            carteGrise = new CarteGrise();
+            carteGrise.setAdresse("BOUCHON: 4 rue bouchon");
+            carteGrise.setTPpNom("BOUCHON: DELL");
+            carteGrise.setVNumeroImmatriculation("BOUCHON: AD-711-AF");
+            carteGrise.setSource("BOUCHON: source");
+        }
 
-            UserInfo userInfo = (UserInfo) session.getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
+        HttpSession session = request.getSession( true );
+        session.setAttribute( ATTRIBUTE_USERCARTESGRISES, carteGrise );
 
-            HttpAccess httpAccess = new HttpAccess(  );
-            String strUrl = _strOtherDataServerUri + userInfo.getFamilyName();
-            String strResponse = httpAccess.doGet( strUrl, null, null );
-            UserCartesGrises userCartesGrises = MapperService.parse( strResponse, UserCartesGrises.class );
-
-            session.setAttribute( ATTRIBUTE_USERCARTESGRISES, userCartesGrises );
-
-            String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_FORM );
-
+        try {
+            String strRedirectUrl = RedirectUtils.getViewUrl( request, FranceConnectSampleApp.VIEW_DEMARCHE_ETAPE2 );
             response.sendRedirect( strRedirectUrl );
         }
         catch ( IOException ex )
         {
-            AppLogService.error( "Error DataClient Adresse : " + ex.getMessage(  ), ex );
+            AppLogService.error( "Error DataClient Adresse redirect : " + ex.getMessage(  ), ex );
+        }
+    }
+
+    public String getData( Token token )
+    {
+        String strResponse = null;
+        HttpAccess httpAccess = new HttpAccess(  );
+
+        String strUrl = getDataServerUri();
+
+        try
+        {
+            RequestAuthenticator authenticator = new SIVTokenAuthenticator( token.getAccessToken(  ) );
+            strResponse = httpAccess.doGet( strUrl, authenticator, null );
+            _logger.debug( "FranceConnect response : " + strResponse );
         }
         catch ( HttpAccessException ex )
         {
-            _logger.error( "Error when fetching mi_siv" + ex.getMessage(  ), ex );
+            _logger.error( "OAuth Login Error" + ex.getMessage(  ), ex );
         }
+
+        return strResponse;
     }
 
-    public String getOtherDataServerUri(  )
+    //TODO remove this when the http header is "Authorization: Bearer XXX"
+    //currently, it is "Authorization: AccessToken XXX"
+    //Also when the token is the one from franceconnect, not hardcoded
+    class SIVTokenAuthenticator implements RequestAuthenticator
+{
+    private String _strAccessToken;
+
+    /**
+     * Constructor
+     * @param strAccessToken The access token value
+     */
+    public SIVTokenAuthenticator( String strAccessToken )
     {
-        return _strOtherDataServerUri;
+        _strAccessToken = strAccessToken;
     }
 
-    public void setOtherDataServerUri( String strOtherDataServerUri )
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        _strOtherDataServerUri = strOtherDataServerUri;
+        return false; // not used
     }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void authenticateRequest( HttpMethodBase hmb, List<String> list )
+    {
+        hmb.addRequestHeader( "Authorization", String.format( "AccessToken %s", "895fae591ccae777094931e269e46447" ) );
+        hmb.addRequestHeader( "Authorization", String.format( "Bearer %s", "895fae591ccae777094931e269e46447" ) );
+    }
+}
 }

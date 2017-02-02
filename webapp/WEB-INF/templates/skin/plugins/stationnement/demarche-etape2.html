@@ -5,12 +5,14 @@
         <#if form??>
         <p class="lead">
           R&eacute;capitulatif de votre demande de carte de stationnement r&eacute;sidentiel
-        <p>
+        </p>
         <ul class="list-group">
-          <li class="list-group-item">Immatriculation     : ${form.VNumeroImmatriculation!'KZ-561-TH'}</li>
+          <li class="list-group-item">Immatriculation     : ${form.VNumeroImmatriculation!'BOUCHON KZ-561-TH'}</li>
           <li class="list-group-item">Marque du v&eacute;hicule  : ${form.VMarque!'MARQUE'}</li>
           <li class="list-group-item">Mod&egrave;le du v&eacute;hicule  : ${form.VDenominationCommerciale!'MODELE'}</li>
-          <li class="list-group-item">Type de v&eacute;hicule    : ${form.VCouleur!'Beige'}</li>
+          <li class="list-group-item">Nom     : ${form.TPpNom!'BOUCHON DELLFM'}</li>
+          <li class="list-group-item">Adresse     : ${form.adresse!'BOUCHON 2 rue FM'}</li>
+          <li class="list-group-item">source SIV     : ${form.VNumeroIdentifiant!'BOUCHON source SIV'}</li>
         </ul>
         <p class="text-center">
         <a href="jsp/site/Portal.jsp?page=crm" class="btn btn-labeled btn-success">
@@ -19,7 +21,7 @@
           </span>
           Valider ma demande
         </a>
-      </p>
+        </p>
       </#if>
     </div>
   </div>

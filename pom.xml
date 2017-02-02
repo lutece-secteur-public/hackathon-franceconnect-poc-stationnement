@@ -34,6 +34,12 @@
             <artifactId>plugin-franceconnect</artifactId>
             <version>[0.9.0,)</version>
             <type>lutece-plugin</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId> <!-- lutece-core depends on a old tika version which depends on bcprov-jdk15 which is the old name for bcprov-jdk15on -->
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

@@ -31,24 +31,16 @@
           <label for="votreAdresse" class="col-sm-3 control-label" >Votre adresse</label>
           <div class="col-sm-8">
             <p class="form-control-static">
-              ${adresse.codePostal!''} ${adresse.commune!''} ${adresse.adresse!''}
+              ${adresse.aft!'Bouchon aft'}
             </p>
           </div>
         </div>
         <div class="form-group">
-          <label for="voitures" class="col-sm-3 control-label" >S&eacute;lectionner le v&eacute;hicule concern&eacute;</label>
+          <label for="voitures" class="col-sm-3 control-label" >Votre immatriculation</label>
           <div class="col-sm-8">
-          <#list cartesgrises as cartegrise>
-            <div class="radio">
             <label>
-                <input type="radio" name="immatriculation" id="optionsRadios1" value="${cartegrise.VNumeroImmatriculation}" checked>
-                &nbsp; ${cartegrise.VNumeroImmatriculation!'XX-000-XX'} 
-                ${cartegrise.VMarque!'Renault'}
-                ${cartegrise.VDenominationCommerciale!'Twingo'}
-                ${cartegrise.VCouleur!'Blanche'}
+                <input type="text" name="immatriculation" id="immatriculation" value="${immatriculation!''}">
              </label>
-          </div>
-          </#list>
           </div>
         </div>
         <div class="form-group">
@@ -61,10 +53,9 @@
             <button type="submit" value="Confirmer" class="btn btn-primary">
               Continuer
             </button>
+          </div>
+        </div>
         </form>
       </div>
-      </div>
   </div>
-</div>
-</div>
 </div>
